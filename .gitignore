@@ -1,0 +1,65 @@
+# .gitignore - common ignores for Python + Node/Vite projects
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+venv.bak/
+
+# Pytest / coverage
+.pytest_cache/
+.cache/
+coverage.xml
+.coveragerc
+htmlcov/
+
+# Distribution / build
+dist/
+build/
+*.egg-info/
+pip-wheel-metadata/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+/.vite/
+
+# Logs
+*.log
+
+# Databases
+*.sqlite3
+*.db
+
+# Environment variables
+.env
+.env.*
+
+# Flask instance folder
+instance/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Others
+*.pyc
+*.pyo
+*.pyd
