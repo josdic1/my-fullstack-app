@@ -1,0 +1,28 @@
+{
+  "editor.inlineSuggest.enabled": true,
+  "editor.suggest.showWords": true,
+  "github.copilot": {
+    "enable": {
+      "*": true
+    },
+    "inlineSuggest": {
+      "enable": true
+    }
+  }
+  ,
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.venv": true,
+    "**/.DS_Store": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/*.log": true,
+    "README.md": true,
+    "readme.md": true,
+    "**/.env": true
+  },
+  "explorer.excludeGitIgnore": true,
+  "explorer.compactFolders": false
+}
