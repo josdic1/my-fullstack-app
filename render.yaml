@@ -1,10 +1,10 @@
 services:
   - type: web
-    name: my-flask-backend
+    name: flask-backend
     env: python
     plan: free
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
+    startCommand: "gunicorn 'backend:create_app()'"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -15,7 +15,7 @@ services:
   - type: static
     name: my-react-frontend
     plan: free
-    buildCommand: "npm install && npm run build"
+    buildCommand: "pip install -r backend/requirements.txt"
     staticPublishPath: "./build"
     routes:
       - type: rewrite
