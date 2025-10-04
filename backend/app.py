@@ -1,16 +1,16 @@
-import os
-from flask import Flask, jsonify
+# backend/app.py
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from dotenv import load_dotenv
-from flask_cors import CORS 
-
-load_dotenv() # Load environment variables from .env
+from flask_migrate import Migrate
+from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'  # SQLite for simplicity
+# For PostgreSQL: app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/myapp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 @app.route('/')
 def home():
