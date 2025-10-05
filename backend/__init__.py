@@ -3,10 +3,12 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_migrate import Migrate
 
 # Initialize extensions
 db = SQLAlchemy()
 jwt = JWTManager()
+migrate = Migrate()
 
 def create_app():
     """Application factory function."""
@@ -35,6 +37,7 @@ def create_app():
     # Initialize extensions with the app
     db.init_app(app)
     jwt.init_app(app)
+    migrate.init_app(app, db)
 
     with app.app_context():
         # Import models here to ensure they are registered with SQLAlchemy
@@ -50,7 +53,8 @@ def create_app():
         # app.register_blueprint(tracks_bp, url_prefix='/api/tracks')
         # app.register_blueprint(track_links_bp, url_prefix='/api/track_links')
 
-        # Create database tables for our models
-        db.create_all()
+        # For dev/debug, create tables automatically for convenience
+        if app.debug:
+            db.create_all()
 
-    return app  # ← Move this line outside the 'with' block
+    return app
