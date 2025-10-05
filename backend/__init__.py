@@ -53,4 +53,4 @@ def create_app():
         # Create database tables for our models
         db.create_all()
 
-        return app
+    return app  # ← Move this line outside the 'with' block
