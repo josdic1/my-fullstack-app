@@ -14,7 +14,7 @@ def create_app():
     """Application factory function."""
     app = Flask(__name__, instance_relative_config=True)
 
-    # Enable CORS to allow your React frontend to make requests to the backend
+    # Enable CORS
     CORS(app)
 
     # Load configuration
@@ -22,8 +22,6 @@ def create_app():
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'a-dev-jwt-key')
 
     # Configure the database
-    # For Render, it will use the DATABASE_URL environment variable.
-    # For local dev, it falls back to a SQLite database in the 'instance' folder.
     default_db_path = f"sqlite:///{os.path.join(app.instance_path, 'db.sqlite3')}"
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', default_db_path)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -37,24 +35,25 @@ def create_app():
     # Initialize extensions with the app
     db.init_app(app)
     jwt.init_app(app)
-    migrate.init_app(app, db)
+
+    # Add a simple test route directly here
+    @app.route('/')
+    def health_check():
+        return {'status': 'ok', 'message': 'Flask app is running'}
+    
+    @app.route('/api/test', methods=['GET'])
+    def test_db():
+        try:
+            db.session.execute(db.text('SELECT 1'))
+            return {'message': 'DB Connection Success!'}, 200
+        except Exception as e:
+            return {'error': f'DB Connection Failed: {str(e)}'}, 500
 
     with app.app_context():
-        # Import models here to ensure they are registered with SQLAlchemy
         from . import models
-
-        # Import Blueprints
         from .routes.users_routes import users_bp
-        # from .routes.tracks_routes import tracks_bp
-        # from .routes.track_links_routes import track_links_bp
-
-        # Register Blueprints with URL prefixes
+        
         app.register_blueprint(users_bp, url_prefix='/api/users')
-        # app.register_blueprint(tracks_bp, url_prefix='/api/tracks')
-        # app.register_blueprint(track_links_bp, url_prefix='/api/track_links')
+        db.create_all()
 
-        # For dev/debug, create tables automatically for convenience
-        if app.debug:
-            db.create_all()
-
-    return app
+    return app  # CRITICAL: This must be OUTSIDE the 'with' block
